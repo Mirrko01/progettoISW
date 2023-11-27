@@ -1,8 +1,6 @@
 from django.contrib import admin
-from django.urls import path
-from Ecommerce import views
+from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('firstView/', views.firstView),
-]
+    path('', include('StoreManager.urls'))]

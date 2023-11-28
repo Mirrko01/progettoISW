@@ -1,10 +1,22 @@
+<head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+</head>
+
 {% block content %}
-
-    <form method="POST">
-        {% csrf_token %}
-        {{form}}
-    </form>
-
-    If you already have an account <a href="/login" target="blank"><strong>login</strong></a> instead.
-
+     <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <divclass="card bg-dark text-light p-4">
+                    <h2 class="text-center">Registrazione</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form }}
+                        <button type="submit" class="btn btn-primary mt-3">Registra</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

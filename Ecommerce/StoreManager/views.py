@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
 from Ecommerce.forms import RegisterUserForm
-from .models import Utente
+from .models import Utente, Prodotto
 
 # Create your views here.
 
@@ -50,7 +50,7 @@ def login_user(request):
             # redirect reindirizza l'utente in un'altra pagina
             response = redirect('base')
             response.set_cookie('username', username)
-
+            context = {'username_cookie': username}
             return response
         else:
             # se c'è un errore nell'autenticazione rimando l'utente al login
@@ -62,3 +62,15 @@ def login_user(request):
 # view temporanea di test
 def base(request):
     return render(request, "./StoreManager/base.html")
+
+
+@login_required(login_url='login')
+def prodotti(request):
+    prodotti = Prodotto.objects.all()
+    return render(request, "./StoreManager/prodotti.html", {"prodotti": prodotti})
+
+
+@login_required(login_url='login')
+def logout_user(request):
+    logout(request)
+    return render(request, './StoreManager/login.html')

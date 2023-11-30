@@ -1,0 +1,49 @@
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabella Prodotti</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+<body>
+
+<div class="container">
+    <h2>Tabella Prodotti</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome Prodotto</th>
+                <th>Tipologia</th>
+                <th>Descrizione</th>
+                <th>Prezzo</th>
+                <th>Quantità</th>
+                <th>Azione</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Sostituisci questi dati con i dati reali del tuo database -->
+            {% for prodotto in prodotti %}
+                <tr>
+                    <td>{{ prodotto.nome_prodotto }}</td>
+                    <td>{{ prodotto.tipologia}}</td>
+                    <td>{{ prodotto.descrizione}}</td>
+                    <td>{{ prodotto.prezzo }}</td>
+                    <td>{{ prodotto.quantita}}</td>
+                    <td><a id="dettagli" href="../login"> Aggiungi al carrello </td>
+                </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+</div>
+
+<td><a id="logout" href="../logout"> logout </td>
+
+</body>
+</html>
+
+{% endblock %}

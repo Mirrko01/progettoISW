@@ -13,20 +13,21 @@ class Utente(models.Model):
         return self.username
 
 
-"""class Prodotto(models.Model):
+class Prodotto(models.Model):
     nome_prodotto = models.CharField(max_length=100)
     tipologia = models.CharField(max_length=20)
-    descrizione = models.CharField(max_length=150)
+    descrizione = models.CharField(max_length=75)
     prezzo = models.FloatField(default=0.0)
     quantita = models.IntegerField(default=0)
 
+    def __str__(self):
+        return self.nome_prodotto
+
+
+class Carrello(models.Model):
+    utente = models.ForeignKey(Utente, on_delete=models.CASCADE)
+    prodotto = models.ForeignKey(Prodotto, on_delete=models.CASCADE)
+    quantita = models.IntegerField(default=1)
+   
+
     # aggiungi funzioni
-
-
-class Acquisto(models.Model):
-    # lista_prodotti=?
-    data_acquisto = models.models.DateField()
-    indirizzo_spedizione = models.CharField(max_length=100)
-    metodo_pagamento = models.CharField(max_length=50)
-
-    # aggiungi funzioni"""

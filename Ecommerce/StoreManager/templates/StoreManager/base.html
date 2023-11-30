@@ -1,1 +1,19 @@
-ciaooooo
+{% block content %}
+
+    <html>
+        <head>
+
+
+
+        </head>
+        <header>
+            <div class="topnav">
+                
+                <a id="login" href="{% url 'login' %}" {% if request.path == '/login/' %} class="active" {% endif %}>Accedi</a>
+                <a id="registrazione" href="{% url 'registrazione' %}" {% if request.path == '/registrazione/' %} class="active" {% endif %}>Registrati</a>
+                
+            </div>
+        </header>
+
+    </html>
+{% endblock %}

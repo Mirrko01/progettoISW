@@ -33,7 +33,7 @@
                     <td>{{ prodotto.descrizione}}</td>
                     <td>{{ prodotto.prezzo }}</td>
                     <td>{{ prodotto.quantita}}</td>
-                    <td><a id="dettagli" href="../login"> Aggiungi al carrello </td>
+                    <td><a href="{% url 'aggiungi_al_carrello' prodotto.id %}">Aggiungi</a></td>
                 </tr>
             {% endfor %}
             

@@ -2,15 +2,14 @@
 
     <html>
         <head>
-
-
-
         </head>
         <header>
             <div class="topnav">
                 
                 <a id="login" href="{% url 'login' %}" {% if request.path == '/login/' %} class="active" {% endif %}>Accedi</a>
                 <a id="registrazione" href="{% url 'registrazione' %}" {% if request.path == '/registrazione/' %} class="active" {% endif %}>Registrati</a>
+                <a id="Prodotti" href="{% url 'prodotti' %}" {% if request.path == '/prodotti/' %} class="active" {% endif %}>Prodotti</a>
+                <a id="Carrello" href="{% url 'carrello' %}" {% if request.path == '/carrello/' %} class="active" {% endif %}>Carrello</a>
                 
             </div>
         </header>

@@ -1,0 +1,68 @@
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrello</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+<body>
+    
+    <div class="container">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+        <!-- Resto del tuo template -->
+    </div>
+<div class="container">
+    <h2>Carrello</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome Prodotto</th>
+                <th>Tipologia</th>
+                <th>Descrizione</th>
+                <th>Prezzo</th>
+                <th>Quantità</th>
+                <th>Totale</th>
+                <th>Azione</th>
+            </tr>
+        </thead>
+        <tbody>
+                
+            {% for carrello_item in carrello.carrelloprodotto_set.all %}
+                <tr>
+                    <td>{{ carrello_item.prodotto.nome_prodotto }}</td>
+                    <td>{{ carrello_item.prodotto.tipologia }}</td>
+                    <td>{{ carrello_item.prodotto.descrizione }}</td>
+                    <td>{{ carrello_item.prodotto.prezzo }}</td>
+                    <td>{{ carrello_item.quantita }}</td>
+                    <td>{% widthratio carrello_item.quantita 1 carrello_item.prodotto.prezzo %}</td>
+                    <td><a href="{% url 'rimuovi_dal_carrello' carrello_item.prodotto.id %}">Rimuovi</a></td>
+                </tr>
+            {% endfor %}
+            
+
+                
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <a href="{% url 'base' %}" class="btn btn-primary">Checkout</a>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+</body>
+</html>
+
+{% endblock %}

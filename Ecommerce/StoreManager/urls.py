@@ -9,6 +9,11 @@ urlpatterns = [
     path("login/", views.login_user, name="login"),
     path("prodotti/", views.prodotti, name="prodotti"),
     path("logout/", views.logout_user, name="logout"),
+    path("carrello/", views.visualizza_carrello, name="carrello"),
+    path('aggiungi_al_carrello/<int:prodotto_id>/',
+         views.aggiungi_al_carrello, name='aggiungi_al_carrello'),
+    path('rimuovi_dal_carrello/<int:prodotto_id>/',
+         views.rimuovi_dal_carrello, name='rimuovi_dal_carrello'),
 
 
     path("base/", views.base, name="base"),

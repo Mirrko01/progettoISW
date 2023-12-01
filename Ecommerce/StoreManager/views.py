@@ -1,12 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+
 
 from Ecommerce.forms import RegisterUserForm
-from .models import Utente, Prodotto
-
-# Create your views here.
+from .models import *
 
 
 def registrazione(request):
@@ -74,3 +73,74 @@ def prodotti(request):
 def logout_user(request):
     logout(request)
     return render(request, './StoreManager/login.html')
+
+
+@login_required(login_url='login')
+def visualizza_carrello(request):
+    # Recupera l'utente autenticato
+    utente = get_object_or_404(Utente, email=request.user.email)
+
+    # Recupera il carrello dell'utente con i prodotti
+    carrello = Carrello.objects.select_related(
+        'utente').prefetch_related('prodotti').get(utente=utente)
+
+    # Passa il carrello con i prodotti al template
+    return render(request, './StoreManager/carrello.html', {'carrello': carrello})
+
+
+@login_required(login_url='login')
+def aggiungi_al_carrello(request, prodotto_id):
+    prodotto = get_object_or_404(Prodotto, pk=prodotto_id)
+    utente = get_object_or_404(Utente, email=request.user.email)
+
+    carrello, created = Carrello.objects.get_or_create(utente=utente)
+
+    carrello_prodotto, prodotto_created = CarrelloProdotto.objects.get_or_create(
+        carrello=carrello, prodotto=prodotto, defaults={'quantita': 1})
+
+    if not prodotto_created:
+        carrello_prodotto.quantita += 1
+        carrello_prodotto.save()
+
+    return redirect('carrello')
+
+
+@login_required(login_url='login')
+def rimuovi_dal_carrello(request, prodotto_id):
+    prodotto = get_object_or_404(Prodotto, pk=prodotto_id)
+    utente = get_object_or_404(Utente, email=request.user.email)
+
+    carrello, created = Carrello.objects.get_or_create(utente=utente)
+
+    carrello_prodotto, prodotto_created = CarrelloProdotto.objects.get_or_create(
+        carrello=carrello, prodotto=prodotto, defaults={'quantita': 1})
+
+    if not prodotto_created and carrello_prodotto.quantita > 1:
+        carrello_prodotto.quantita -= 1
+        carrello_prodotto.save()
+    else:
+        carrello_prodotto.delete()
+
+    return redirect('carrello')
+
+
+
+@login_required(login_url='login')
+def checkout(request):
+    return response
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -65,7 +65,21 @@ def base(request):
 
 @login_required(login_url='login')
 def prodotti(request):
-    prodotti = Prodotto.objects.all()
+    # Ottieni i parametri di ricerca dalla richiesta GET
+    tipologia = request.GET.get('tipologia', '')
+    prezzo_minimo = request.GET.get('prezzo_minimo', 0)
+    prezzo_massimo = request.GET.get('prezzo_massimo', float('inf'))
+
+    # Filtra i prodotti in base ai parametri di ricerca
+    if tipologia != "Tipologia":
+        prodotti = Prodotto.objects.filter(
+            tipologia=tipologia,
+            prezzo__gte=prezzo_minimo,
+            prezzo__lte=prezzo_massimo
+        )
+    else:
+        prodotti = Prodotto.objects.all()
+
     return render(request, "./StoreManager/prodotti.html", {"prodotti": prodotti})
 
 
@@ -124,23 +138,5 @@ def rimuovi_dal_carrello(request, prodotto_id):
     return redirect('carrello')
 
 
-
-@login_required(login_url='login')
 def checkout(request):
-    return response
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return render(request, './StoreManager/checkout.html')

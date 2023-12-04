@@ -9,41 +9,60 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 </head>
-<body>
+    <body>
+        
+        <div class="container mt-4">
+            <form method="get" action="{% url 'prodotti' %}" class="mb-3">
+                <div class="row">
+                    <div class="col-md-3">
+                        <input type="text" name="tipologia" class="form-control" placeholder="Tipologia" value="Tipologia">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" name="prezzo_minimo" class="form-control" placeholder="Prezzo Minimo" value="0">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" name="prezzo_massimo" class="form-control" placeholder="Prezzo Massimo" value="10000">
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary">Cerca</button>
+                    </div>
+                </div>
+            </form>
 
-<div class="container">
-    <h2>Tabella Prodotti</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Nome Prodotto</th>
-                <th>Tipologia</th>
-                <th>Descrizione</th>
-                <th>Prezzo</th>
-                <th>Quantità</th>
-                <th>Azione</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Sostituisci questi dati con i dati reali del tuo database -->
-            {% for prodotto in prodotti %}
-                <tr>
-                    <td>{{ prodotto.nome_prodotto }}</td>
-                    <td>{{ prodotto.tipologia}}</td>
-                    <td>{{ prodotto.descrizione}}</td>
-                    <td>{{ prodotto.prezzo }}</td>
-                    <td>{{ prodotto.quantita}}</td>
-                    <td><a href="{% url 'aggiungi_al_carrello' prodotto.id %}">Aggiungi</a></td>
-                </tr>
-            {% endfor %}
-            
-        </tbody>
-    </table>
-</div>
 
-<td><a id="logout" href="../logout"> logout </td>
+        <div class="container">
+            <h2>Tabella Prodotti</h2>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nome Prodotto</th>
+                        <th>Tipologia</th>
+                        <th>Descrizione</th>
+                        <th>Prezzo</th>
+                        <th>Quantità</th>
+                        <th>Azione</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sostituisci questi dati con i dati reali del tuo database -->
+                    {% for prodotto in prodotti %}
+                        <tr>
+                            <td>{{ prodotto.nome_prodotto }}</td>
+                            <td>{{ prodotto.tipologia}}</td>
+                            <td>{{ prodotto.descrizione}}</td>
+                            <td>{{ prodotto.prezzo }}</td>
+                            <td>{{ prodotto.quantita}}</td>
+                            <td><a href="{% url 'aggiungi_al_carrello' prodotto.id %}">Aggiungi</a></td>
+                        </tr>
+                    {% endfor %}
+                    
+                </tbody>
+            </table>
+        </div>
 
-</body>
+        <td><a id="logout" href="../logout"> logout </td>
+
+    </body>
 </html>
 
 {% endblock %}

@@ -3,7 +3,7 @@
 {% block main%}
 <div class="container mt-5">
     <h2>Checkout</h2>
-    <form>
+    <form method="POST">
         <div class="form-group">
             <label for="metodoPagamento">Metodo di Pagamento:</label>
             <input type="text" class="form-control" id="metodoPagamento" name="metodoPagamento" required>
@@ -12,7 +12,11 @@
             <label for="indirizzo">Indirizzo di Spedizione:</label>
             <input type="text" class="form-control" id="indirizzo" name="indirizzo" required>
         </div>
-        <button type="submit" class="btn btn-primary">Ordina</button>
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <a href="{% url 'effettua_ordine' %}" class="btn btn-primary">Ordina</a>
+            </div>
+        </div>
     </form>
 </div>
 

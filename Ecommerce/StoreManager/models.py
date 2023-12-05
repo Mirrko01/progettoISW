@@ -24,16 +24,6 @@ class Prodotto(models.Model):
         return self.nome_prodotto
 
 
-"""class Carrello(models.Model):
-    utente = models.ForeignKey(Utente, on_delete=models.CASCADE)
-    prodotto = models.ForeignKey(Prodotto, on_delete=models.CASCADE)
-    quantita = models.IntegerField(default=1)
-
-    def __str__(self):
-        return f"{self.utente} - {self.prodotto} - {self.quantita}"
-    # aggiungi funzioni"""
-
-
 class Carrello(models.Model):
     utente = models.OneToOneField(Utente, on_delete=models.CASCADE)
     prodotti = models.ManyToManyField(Prodotto, through='CarrelloProdotto')
@@ -42,10 +32,21 @@ class Carrello(models.Model):
         return f"Carrello di {self.utente.username}"
 
 
+class Ordine(models.Model):
+    utente = models.ForeignKey(Utente, on_delete=models.CASCADE)
+    data_ordine = models.DateTimeField(auto_now_add=True)
+    importo_totale = models.FloatField(default=0.0)
+
+    def __str__(self):
+        return f"Ordine di {self.utente.username} - {self.data_ordine}"
+
+
 class CarrelloProdotto(models.Model):
     carrello = models.ForeignKey(Carrello, on_delete=models.CASCADE)
     prodotto = models.ForeignKey(Prodotto, on_delete=models.CASCADE)
     quantita = models.IntegerField(default=1)
+    ordine = models.ForeignKey(
+        Ordine, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return f"{self.carrello.utente.username} - {self.prodotto.nome_prodotto} - {self.quantita}"

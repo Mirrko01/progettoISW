@@ -2,18 +2,29 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import user_passes_test
 
 
 from Ecommerce.forms import RegisterUserForm
 from .models import *
 
 
+def is_admin(user):
+    return user.is_authenticated and user.is_staff
+
+
 def registrazione(request):
+    # Creo un istanza del form di registrazione
     form = RegisterUserForm(request.POST)
+
     if request.method == "POST":
         form = RegisterUserForm(request.POST)
+
         if form.is_valid():
+            # Salvo i dati inseriti nel form
             form.save()
+
+            # Recupero tutti i dati inseriti nel form tramite i nomi dei campi
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password1"]
 
@@ -22,12 +33,15 @@ def registrazione(request):
             last_name = form.cleaned_data.get('cognome')
             telefono = form.cleaned_data.get('cognome')
 
+            # Eseguo l'autenticazione dell'utente con l'username e la password inseriti
             user = authenticate(username=username, password=password)
 
+            # Creo una nuova istanza Utente e la salvo nel DB
             utente = Utente.objects.create(
                 username=username, nome=first_name, cognome=last_name, telefono=telefono, email=email, password=password)
             utente.save()
     else:
+        # Se il metodo di richiesta non dovesse essere "POST" creo un'istanza vuota del form
         form = RegisterUserForm()
 
     return render(request=request,
@@ -37,37 +51,37 @@ def registrazione(request):
 
 def login_user(request):
     if request.method == "POST":
+        # Recupero username e password
         username = request.POST['username']
         password = request.POST['password']
-        # Provo ad autenticare l'utente con username e password inseriti
-        user = authenticate(request, username=username,
-                            password=password)
+
+        # Provo ad autenticare l'utente
+        user = authenticate(request, username=username, password=password)
+
+        # Se le credenziali sono valide
         if user is not None:
-            # Se le credenziali sono presenti nel db allora l'utente viene loggato
+            # Log in dell'utente
             login(request, user)
 
-            # redirect reindirizza l'utente in un'altra pagina
-            response = redirect('base')
+            response = redirect('prodotti')
             response.set_cookie('username', username)
-            context = {'username_cookie': username}
+
             return response
         else:
-            # se c'è un errore nell'autenticazione rimando l'utente al login
             return render(request, './StoreManager/login.html')
     else:
         return render(request, './StoreManager/login.html')
 
 
-# view temporanea di test
-def base(request):
-    return render(request, "./StoreManager/base.html")
-
-
 @login_required(login_url='login')
 def prodotti(request):
-    # Ottieni i parametri di ricerca dalla richiesta GET
+    # Get del parametro 'tipologia', se non viene fornito di default è una stringa vuota
     tipologia = request.GET.get('tipologia', '')
+
+    # Get del parametro 'prezzo_minimo', se non viene fornito di default è zero
     prezzo_minimo = request.GET.get('prezzo_minimo', 0)
+
+    # Get del parametro 'prezzo_massimo', se non viene fornito di default è infinito
     prezzo_massimo = request.GET.get('prezzo_massimo', float('inf'))
 
     # Filtra i prodotti in base ai parametri di ricerca
@@ -102,16 +116,22 @@ def visualizza_carrello(request):
     return render(request, './StoreManager/carrello.html', {'carrello': carrello})
 
 
+# View che permette di aggiungere un prodotto al carrello
 @login_required(login_url='login')
 def aggiungi_al_carrello(request, prodotto_id):
+    # Recupero il prodotto scelto tramite il suo id
     prodotto = get_object_or_404(Prodotto, pk=prodotto_id)
+
+    # Recupero l'utente tramite la mail
     utente = get_object_or_404(Utente, email=request.user.email)
 
-    carrello, created = Carrello.objects.get_or_create(utente=utente)
+    # Creo/Recupero il carrello dell'utente.
+    carrello = Carrello.objects.get_or_create(utente=utente)
 
     carrello_prodotto, prodotto_created = CarrelloProdotto.objects.get_or_create(
         carrello=carrello, prodotto=prodotto, defaults={'quantita': 1})
 
+    # Se il prodotto è già presente nel carrello incremento la quantità
     if not prodotto_created:
         carrello_prodotto.quantita += 1
         carrello_prodotto.save()
@@ -121,18 +141,24 @@ def aggiungi_al_carrello(request, prodotto_id):
 
 @login_required(login_url='login')
 def rimuovi_dal_carrello(request, prodotto_id):
+    # Recupero il prodotto scelto tramite il suo id
     prodotto = get_object_or_404(Prodotto, pk=prodotto_id)
+
+    # Recupero l'utente tramite la mail
     utente = get_object_or_404(Utente, email=request.user.email)
 
+    # Creo/Recupero il carrello dell'utente.
     carrello, created = Carrello.objects.get_or_create(utente=utente)
 
     carrello_prodotto, prodotto_created = CarrelloProdotto.objects.get_or_create(
         carrello=carrello, prodotto=prodotto, defaults={'quantita': 1})
 
+    # Se il prodotto è già presente nel carrello decremento la quantità
     if not prodotto_created and carrello_prodotto.quantita > 1:
         carrello_prodotto.quantita -= 1
         carrello_prodotto.save()
     else:
+        # Se la quantità è 1 allora elimino il prodotto dal carrello
         carrello_prodotto.delete()
 
     return redirect('carrello')
@@ -140,3 +166,46 @@ def rimuovi_dal_carrello(request, prodotto_id):
 
 def checkout(request):
     return render(request, './StoreManager/checkout.html')
+
+
+@login_required(login_url='login')
+def effettua_ordine(request):
+    utente = get_object_or_404(Utente, email=request.user.email)
+
+    # Creazione dell'ordine
+    ordine = Ordine.objects.create(utente=utente)
+
+    # Recupero del carrello dell'utente con i prodotti
+    carrello = Carrello.objects.select_related(
+        'utente').prefetch_related('prodotti').get(utente=utente)
+
+    # Associazione degli elementi del carrello all'ordine
+    for carrello_prodotto in carrello.carrelloprodotto_set.all():
+        carrello_prodotto.ordine = ordine
+        carrello_prodotto.save()
+
+    # Calcolo dell'importo totale dell'ordine
+    ordine.importo_totale = sum(
+        item.prodotto.prezzo * item.quantita for item in ordine.carrelloprodotto_set.all())
+    ordine.save()
+
+    # Svuotamento del carrello
+    carrello.prodotti.clear()
+
+    messages.success(request, 'Ordine effettuato con successo!')
+
+    return redirect('prodotti')
+
+
+def is_admin(user):
+    return user.is_authenticated and user.is_staff
+
+
+@user_passes_test(is_admin, login_url='login')
+def dashboard(request):
+    ordini = Ordine.objects.all()
+
+    # Calcola il totale delle vendite
+    total_sales = sum(ordine.importo_totale for ordine in ordini)
+
+    return render(request, './StoreManager/dashboard.html', {'ordini': ordini, 'total_sales': total_sales})

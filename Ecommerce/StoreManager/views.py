@@ -125,9 +125,10 @@ def aggiungi_al_carrello(request, prodotto_id):
     # Recupero l'utente tramite la mail
     utente = get_object_or_404(Utente, email=request.user.email)
 
-    # Creo/Recupero il carrello dell'utente.
-    carrello = Carrello.objects.get_or_create(utente=utente)
+    # Ottengo l'istanza del carrello o la creo se non esiste
+    carrello, created = Carrello.objects.get_or_create(utente=utente)
 
+    # Ottengo l'istanza di CarrelloProdotto o la creo se non esiste
     carrello_prodotto, prodotto_created = CarrelloProdotto.objects.get_or_create(
         carrello=carrello, prodotto=prodotto, defaults={'quantita': 1})
 
@@ -171,7 +172,6 @@ def checkout(request):
 @login_required(login_url='login')
 def effettua_ordine(request):
     utente = get_object_or_404(Utente, email=request.user.email)
-
     # Creazione dell'ordine
     ordine = Ordine.objects.create(utente=utente)
 

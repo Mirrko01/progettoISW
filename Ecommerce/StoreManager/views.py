@@ -209,3 +209,56 @@ def dashboard(request):
     total_sales = sum(ordine.importo_totale for ordine in ordini)
 
     return render(request, './StoreManager/dashboard.html', {'ordini': ordini, 'total_sales': total_sales})
+
+
+@user_passes_test(is_admin, login_url='login')
+def aggiungi_prodotto(request):
+    if request.method == "POST":
+        nomeProdotto = request.POST['nomeProdotto']
+        tipologia = request.POST['tipologia']
+        descrizione = request.POST['descrizione']
+        quantita = request.POST['quantita']
+        prezzo = request.POST['prezzo']
+
+        # Utilizza il metodo create per creare un'istanza di Prodotto
+        prodotto = Prodotto.objects.create(
+            nome_prodotto=nomeProdotto,
+            tipologia=tipologia,
+            descrizione=descrizione,
+            quantita=quantita,
+            prezzo=prezzo
+        )
+
+        # Salva l'istanza di Prodotto nel database
+        prodotto.save()
+        messages.success(request, 'Prodotto aggiunto alla lista!')
+    return render(request, "./StoreManager/aggiungiProdotto.html")
+
+
+@user_passes_test(is_admin, login_url='login')
+def modifica_prodotto(request, prodotto_id):
+    prodotto = get_object_or_404(Prodotto, pk=prodotto_id)
+
+    # Se il form è stato inviato, processa le modifiche
+    if request.method == "POST":
+        prodotto.nome_prodotto = request.POST.get('nome_prodotto')
+        prodotto.tipologia = request.POST.get('tipologia')
+        prodotto.descrizione = request.POST.get('descrizione')
+        prodotto.quantita = request.POST.get('quantita')
+        prodotto.prezzo = request.POST.get('prezzo')
+
+        prodotto.save()
+
+        messages.success(request, 'Prodotto modificato con successo!')
+        return redirect('prodotti')
+
+    return render(request, './StoreManager/modificaProdotto.html', {'prodotto': prodotto})
+
+
+@user_passes_test(is_admin, login_url='login')
+def elimina_prodotto(request, prodotto_id):
+    prodotto = get_object_or_404(Prodotto, pk=prodotto_id)
+
+    prodotto.delete()
+    messages.success(request, 'Prodotto eliminato con successo!')
+    return redirect('prodotti')

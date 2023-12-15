@@ -17,6 +17,12 @@ urlpatterns = [
     path("checkout/", views.checkout, name="checkout"),
     path("effettua_ordine/", views.effettua_ordine, name="effettua_ordine"),
     path("dashboard/", views.dashboard, name="dashboard"),
+    path("aggiungi_prodotto", views.aggiungi_prodotto, name="aggiungi_prodotto"),
+    path('modifica_prodotto/<int:prodotto_id>/',
+         views.modifica_prodotto, name='modifica_prodotto'),
+    path('elimina_prodotto/<int:prodotto_id>/',
+         views.elimina_prodotto, name="elimina_prodotto"),
+
 
 
 ]

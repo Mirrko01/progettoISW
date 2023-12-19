@@ -26,7 +26,7 @@ class Prodotto(models.Model):
 
 class Carrello(models.Model):
     utente = models.OneToOneField(Utente, on_delete=models.CASCADE)
-    prodotti = models.ManyToManyField(Prodotto, through='CarrelloProdotto')
+    #prodotti = models.ManyToManyField(Prodotto, through='CarrelloProdotto')
 
     def __str__(self):
         return f"Carrello di {self.utente.username}"

@@ -68,6 +68,7 @@ def login_user(request):
 
             return response
         else:
+            messages.error(request, 'Login fallito, riprova')
             return render(request, './StoreManager/login.html')
     else:
         return render(request, './StoreManager/login.html')

@@ -40,6 +40,8 @@ def registrazione(request):
             utente = Utente.objects.create(
                 username=username, nome=first_name, cognome=last_name, telefono=telefono, email=email, password=password)
             utente.save()
+            messages.success(request, 'Account creato con successo')
+
     else:
         # Se il metodo di richiesta non dovesse essere "POST" creo un'istanza vuota del form
         form = RegisterUserForm()

@@ -18,7 +18,7 @@ class testCarrelloProdotto (unittest.TestCase):
         self.prodotto = Prodotto(nome_prodotto="pasta",tipologia="cibo", descrizione="pasta barilla",prezzo=2.0,quantita=1)
         self.prodotto.save()
 
-        self.carrello = Carrello(utente=self.utente)
+        self.carrello = Carrello(utente=self.utente, prodotto=self.prodotto)
         self.carrello.save()
 
         self.ordine = Ordine(utente=self.utente,data_ordine="2023-09-10",importo_totale=10.0)
@@ -33,6 +33,7 @@ class testCarrelloProdotto (unittest.TestCase):
         self.assertEqual(self.carrelloProdotto.prodotto.nome_prodotto, "pasta")
         self.assertEqual(self.carrelloProdotto.quantita, 15.0)
         self.assertEqual(self.carrelloProdotto.ordine.utente.username,"giannimunari123")
+
 
     def test_str(self):
         strCarrelloProdotto = self.carrelloProdotto.__str__()

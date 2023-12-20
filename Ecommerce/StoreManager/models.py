@@ -38,7 +38,7 @@ class Ordine(models.Model):
     importo_totale = models.FloatField(default=0.0)
 
     def __str__(self):
-        return f"Ordine di {self.utente.username} - {self.data_ordine}"
+        return f"Ordine di {self.utente.username}"
 
 
 class CarrelloProdotto(models.Model):

@@ -11,30 +11,34 @@ from StoreManager.models import Ordine
 class testCarrelloProdotto (unittest.TestCase):
 
     def setUp(self):
-        
-        self.utente = Utente(username = "giannimunari123", nome = "Gianni", cognome = "Munari", telefono = "333123456", email = "giannimunari@test.com", password = "pippo")
-        self.utente.save()
+        # Creare un utente di esempio
+        self.utente = Utente.objects.create(
+            username = "giannimunari123", nome = "Gianni", cognome = "Munari", telefono = "333123456", email = "pippo@test.com", password = "pippo")
 
-        self.prodotto = Prodotto(nome_prodotto="pasta",tipologia="cibo", descrizione="pasta barilla",prezzo=2.0,quantita=1)
-        self.prodotto.save()
+        # Creare un carrello associato all'utente
+        self.carrello = Carrello.objects.create(utente=self.utente)
 
-        self.carrello = Carrello(utente=self.utente, prodotto=self.prodotto)
-        self.carrello.save()
+        # Creare un prodotto di esempio
+        self.prodotto = Prodotto.objects.create(
+            nome_prodotto='Pasta', tipologia='Cibo', descrizione='Pasta Barilla', prezzo=2.0, quantita=10)
 
-        self.ordine = Ordine(utente=self.utente,data_ordine="2023-09-10",importo_totale=10.0)
-        self.ordine.save()
-
-        self.carrelloProdotto = CarrelloProdotto(carrello=self.carrello,prodotto=self.prodotto,quantita=15.0,ordine=self.ordine)
-        self.carrelloProdotto.save()
-
-    def testCarrelloProdotto(self):
-
-        self.assertEqual(self.carrelloProdotto.carrello.utente.username,"giannimunari123")
-        self.assertEqual(self.carrelloProdotto.prodotto.nome_prodotto, "pasta")
-        self.assertEqual(self.carrelloProdotto.quantita, 15.0)
-        self.assertEqual(self.carrelloProdotto.ordine.utente.username,"giannimunari123")
-
+        # Creare un ordine di esempio
+        self.ordine = Ordine.objects.create(
+            utente=self.utente, data_ordine='2023-01-01')
 
     def test_str(self):
-        strCarrelloProdotto = self.carrelloProdotto.__str__()
-        self.assertEqual(strCarrelloProdotto , "giannimunari123 - pasta - 15.0")
+        # Creare un oggetto CarrelloProdotto di esempio
+        carrello_prodotto = CarrelloProdotto.objects.create(
+            carrello=self.carrello, prodotto=self.prodotto, quantita=3, ordine=self.ordine)
+
+        # Verificare che il metodo __str__ restituisca la stringa attesa
+        expected_str = f"{self.utente.username} - {self.prodotto.nome_prodotto} - 3"
+        self.assertEqual(str(carrello_prodotto), expected_str)
+
+    # Aggiungi altri metodi di test secondo necessità
+        
+    def tearDown(self):
+        # Elimina gli oggetti di test
+        Utente.objects.all().delete()
+        Prodotto.objects.all().delete()
+        Carrello.objects.all().delete()

@@ -46,9 +46,9 @@
                             <td>{{ prodotto.descrizione}}</td>
                             <td>{{ prodotto.prezzo }}</td>
                             <td>{{ prodotto.quantita}}</td>
-                            <td><a href="{% url 'aggiungi_al_carrello' prodotto.id %}">Aggiungi</a></td>
+                            <td><a href="{% url 'aggiungi_al_carrello' prodotto.id %}" id="aggiungi" name="aggiungi">Aggiungi</a></td>
                             {% if user.is_staff %}
-                                <td><a href="{% url 'modifica_prodotto' prodotto.id %}">Modifica</a></td>
+                                <td><a href="{% url 'modifica_prodotto' prodotto.id %}" id="modifica" name="modifica">Modifica</a></td>
                             {% endif %}
                         </tr>
                     {% endfor %}

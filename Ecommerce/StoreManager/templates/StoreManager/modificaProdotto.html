@@ -28,8 +28,8 @@
                         <label for="prezzo">Prezzo</label>
                         <input type="number" name="prezzo" id="prezzo" class="form-control" value="{{ prodotto.prezzo }}">
                     </div>
-                    <button type="submit" class="btn btn-primary">Salva Modifiche</button>
-                    <a href="{% url 'elimina_prodotto' prodotto.id %}" class="btn btn-danger">Elimina Prodotto</a>
+                    <button type="submit" class="btn btn-primary" id="modificaProdotto" name="modificaProdotto">Salva Modifiche</button>
+                    <a href="{% url 'elimina_prodotto' prodotto.id %}" class="btn btn-danger" id="eliminaProdotto" name="eliminaProdotto">Elimina Prodotto</a>
 
                 </form>
             </div>

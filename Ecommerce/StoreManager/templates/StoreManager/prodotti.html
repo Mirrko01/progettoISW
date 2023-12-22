@@ -6,13 +6,13 @@
             <form method="get" action="{% url 'prodotti' %}" class="mb-3">
                 <div class="row">
                     <div class="col-md-3">
-                        <input type="text" name="tipologia" class="form-control" placeholder="Tipologia" value="Tipologia">
+                        <input type="text" name="tipologia" class="form-control" placeholder="Tipologia" value="Tipologia" id="tipologia">
                     </div>
                     <div class="col-md-3">
-                        <input type="number" name="prezzo_minimo" class="form-control" placeholder="Prezzo Minimo" value="0.0">
+                        <input type="number" name="prezzo_minimo" class="form-control" placeholder="Prezzo Minimo" value="0.0" id="prezzo_minimo">
                     </div>
                     <div class="col-md-3">
-                        <input type="number" name="prezzo_massimo" class="form-control" placeholder="Prezzo Massimo" value="10000.0">
+                        <input type="number" name="prezzo_massimo" class="form-control" placeholder="Prezzo Massimo" value="10000.0" id="prezzo_massimo">
                     </div>
                     <div class="col-md-3">
                         <button type="submit" class="btn btn-primary" name="cerca" id="cerca">Cerca</button>

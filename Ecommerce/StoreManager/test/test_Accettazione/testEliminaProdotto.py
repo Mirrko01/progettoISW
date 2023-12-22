@@ -21,31 +21,40 @@ class eliminaProdottoTest(unittest.TestCase):
         # Apri la pagina di login
         self.browser.get("http://localhost:8000/login")
 
-         # Admin effettua login
+        # Admin effettua login
         username = self.browser.find_element(
             By.NAME, "username")
         username.send_keys("admin1")
- 
+
         password = self.browser.find_element(
             By.NAME, "password")
         password.send_keys("admin1@")
 
-         # Invia il form
+        # Invia il form
         submit_button = self.browser.find_element(
             By.NAME, "loginButton")
         submit_button.click()
 
-        self.browser.navigate().to("http://localhost:8000/prodotti")
+        self.browser.get("http://localhost:8000/prodotti")
+        wait = WebDriverWait(self.browser, 10)
 
-        #L'admin sceglie il prodotto da modificare
+        search_button = self.browser.find_element(
+            By.NAME, "cerca")
+        search_button.click()
+        # L'admin sceglie il prodotto da modificare
         link_modifica = self.browser.find_element(
             By.NAME, "modifica")
         link_modifica.click()
 
-       #L'admin clicca sul link di eliminazione del prodotto
+        wait = WebDriverWait(self.browser, 10)
+        link_modifica = self.browser.find_element(
+            By.NAME, "eliminaProdotto")
+        link_modifica.click()
+
+       # L'admin clicca sul link di eliminazione del prodotto
 
         wait = WebDriverWait(self.browser, 10)
         success_message = wait.until(EC.presence_of_element_located(
             (By.CSS_SELECTOR, ".alert-success")))
-    
+
         self.assertIn("Prodotto eliminato con successo!", success_message.text)

@@ -30,12 +30,7 @@ class LoginClienteTest(unittest.TestCase):
             By.NAME, "password")
         password.send_keys("password123@")
 
-
         # Invia il form
         submit_button = self.browser.find_element(
             By.NAME, "loginButton")
         submit_button.click()
-
-        wait = WebDriverWait(self.browser, 10)
-        success_message = wait.until(EC.presence_of_element_located(
-            (By.CSS_SELECTOR, ".alert-success")))

@@ -23,7 +23,7 @@ class RegistrazioneClienteTest(unittest.TestCase):
         # Compila il form di registrazione
         username = self.browser.find_element(
             By.NAME, "username")
-        username.send_keys("pippo")
+        username.send_keys("ciao")
 
         # Assicurati di utilizzare il nome corretto per il campo della password
         password = self.browser.find_element(
@@ -37,7 +37,7 @@ class RegistrazioneClienteTest(unittest.TestCase):
 
         email = self.browser.find_element(
             By.NAME, "email")
-        email.send_keys("pippo@example.com")
+        email.send_keys("ciao@example.com")
 
         # Assicurati di utilizzare il nome corretto per il campo del nome
         nome = self.browser.find_element(

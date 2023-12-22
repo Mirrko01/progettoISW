@@ -82,20 +82,18 @@ def prodotti(request):
     tipologia = request.GET.get('tipologia', '')
 
     # Get del parametro 'prezzo_minimo', se non viene fornito di default è zero
-    prezzo_minimo = request.GET.get('prezzo_minimo', 0)
+    prezzo_minimo = float(request.GET.get('prezzo_minimo', 0))
 
     # Get del parametro 'prezzo_massimo', se non viene fornito di default è infinito
-    prezzo_massimo = request.GET.get('prezzo_massimo', float('inf'))
-
+    prezzo_massimo = float(request.GET.get('prezzo_massimo', float('inf')))
+    print(prezzo_massimo)
+    print(prezzo_minimo)
     # Filtra i prodotti in base ai parametri di ricerca
-    if tipologia != "Tipologia":
-        prodotti = Prodotto.objects.filter(
-            tipologia=tipologia,
-            prezzo__gte=prezzo_minimo,
-            prezzo__lte=prezzo_massimo
-        )
-    else:
-        prodotti = Prodotto.objects.all()
+
+    prodotti = Prodotto.objects.filter(
+        prezzo__gte=prezzo_minimo,
+        prezzo__lte=prezzo_massimo
+    )
 
     return render(request, "./StoreManager/prodotti.html", {"prodotti": prodotti})
 

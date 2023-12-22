@@ -9,8 +9,8 @@ import unittest
 
 class aggiuntaProdottoTest(unittest.TestCase):
 
-    def cancellaProdotti(self):
-        Prodotto.Objects.all().delete()
+    # def cancellaProdotti(self):
+    # Prodotto.Objects.all().delete()
 
     def setUp(self):
         # Sostituisci con il tuo percorso per chromebrowser
@@ -20,26 +20,26 @@ class aggiuntaProdottoTest(unittest.TestCase):
         # Apri la pagina di login
         self.browser.get("http://localhost:8000/login")
 
-         # Admin effettua login
+        # Admin effettua login
         username = self.browser.find_element(
             By.NAME, "username")
         username.send_keys("admin1")
- 
+
         password = self.browser.find_element(
             By.NAME, "password")
         password.send_keys("admin1@")
 
-         # Invia il form
+        # Invia il form
         submit_button = self.browser.find_element(
             By.NAME, "loginButton")
         submit_button.click()
 
-        self.browser.navigate().to("http://localhost:8000/aggiungiProdotto")
+        self.browser.get("http://localhost:8000/aggiungi_prodotto")
 
         # Compila il form di aggiunta prodotto
         nome_prodotto = self.browser.find_element(
             By.NAME, "nomeProdotto")
-        nome_prodotto.send_keys("pasta")
+        nome_prodotto.send_keys("carne")
 
         tipologia = self.browser.find_element(
             By.NAME, "tipologia")
@@ -55,8 +55,7 @@ class aggiuntaProdottoTest(unittest.TestCase):
 
         prezzo = self.browser.find_element(
             By.NAME, "prezzo")
-        prezzo.send_keys(1.5)
-
+        prezzo.send_keys(2)
 
         # Invia il form
         submit_button = self.browser.find_element(
@@ -66,9 +65,7 @@ class aggiuntaProdottoTest(unittest.TestCase):
         wait = WebDriverWait(self.browser, 10)
         success_message = wait.until(EC.presence_of_element_located(
             (By.CSS_SELECTOR, ".alert-success")))
-    
-        prodotto_aggiunto = Prodotto.objects.get(nome_prodotto="pasta")
 
-        self.assertEqual(prodotto_aggiunto.tipologia,"cibo")
+        prodotto_aggiunto = Prodotto.objects.get(nome_prodotto="carne")
 
-       
+        self.assertEqual(prodotto_aggiunto.tipologia, "cibo")

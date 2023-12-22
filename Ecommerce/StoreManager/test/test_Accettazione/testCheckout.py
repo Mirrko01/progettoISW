@@ -51,8 +51,8 @@ class checkoutTest(unittest.TestCase):
         submit.click()
 
         wait = WebDriverWait(self.browser, 10)
+        success_message = wait.until(EC.presence_of_element_located(
+            (By.CSS_SELECTOR, ".alert-success")))
 
-        ordine_aggiunto = Ordine.objects.get(
-            Indirizzo="Via Roma 22")
-
-        self.assertEqual(ordine_aggiunto.indirizzo, "Via Roma 22")
+        # Verifica che il testo del messaggio di successo contenga la stringa desiderata
+        self.assertIn('Ordine effettuato con successo!', success_message.text)

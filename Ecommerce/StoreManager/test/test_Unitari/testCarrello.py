@@ -10,23 +10,31 @@ class testCarrello (unittest.TestCase):
 
     def setUp(self):
         # Crea un utente di test
-        self.utente = Utente.objects.create(
-            username="testuser",
-            nome="Test",
-            cognome="User",
-            telefono="123456789",
-            email="testuser@example.com",
-            password="testpassword"
-        )
+       # self.utente = Utente.objects.create(
+        #    username="testuser",
+         #   nome="Test",
+          #  cognome="User",
+           # telefono="123456789",
+            #email="testuser@example.com",
+           # password="testpassword"
+        #)
+
+        self.utente = Utente(username = "testuser", nome="Test", cognome="User", telefono="123456789", email = "testuser@example.com", password = "testpassword")
+        self.utente.save()
+
 
         # Crea un prodotto di test
-        self.prodotto = Prodotto.objects.create(
-            nome_prodotto="Prodotto di Test",
-            tipologia="Test",
-            descrizione="Descrizione di test",
-            prezzo=10.00,
-            quantita=1
-        )
+        #self.prodotto = Prodotto.objects.create(
+         #   nome_prodotto="Prodotto di Test",
+         #   tipologia="Test",
+         #   descrizione="Descrizione di test",
+          #  prezzo=10.00,
+           # quantita=1
+        #)
+
+        self.prodotto = Prodotto(nome_prodotto = "Prodotto di Test", tipologia = "Test", descrizione = "Descrizione di test", prezzo = 10.00, quantita = 1)
+        self.prodotto.save()
+
 
     def test_carrello_str(self):
         # Crea un carrello di test associato all'utente
@@ -35,7 +43,7 @@ class testCarrello (unittest.TestCase):
         # Verifica che il metodo __str__ restituisca una stringa appropriata
         self.assertEqual(str(carrello), f"Carrello di {self.utente.username}")
 
-    def test_aggiungi_prodotto_al_carrello(self):
+    def testCarrello(self):
         # Crea un carrello di test associato all'utente
         carrello = Carrello.objects.create(utente=self.utente)
 

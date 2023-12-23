@@ -40,6 +40,7 @@ def registrazione(request):
             utente = Utente.objects.create(
                 username=username, nome=first_name, cognome=last_name, telefono=telefono, email=email, password=password)
             utente.save()
+            carrello, created = Carrello.objects.get_or_create(utente=utente)
             messages.success(request, 'Account creato con successo')
 
     else:
